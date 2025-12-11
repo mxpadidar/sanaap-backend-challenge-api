@@ -1,0 +1,31 @@
+[project]
+name = "sanaap-backend-challenge-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "django>=5.2.0,<5.3",
+  "djangorestframework>=3.16.1",
+]
+
+[dependency-groups]
+dev = [
+  "django-stubs>=5.2.8",
+  "django-stubs-ext>=5.2.8",
+  "djangorestframework-stubs>=3.16.6",
+  "pyright>=1.1.407",
+  "ruff>=0.14.8",
+]
+
+[tool.pyright]
+pythonVersion = "3.13"
+typeCheckingMode = "standard"
+venvPath = "."
+venv = ".venv"
+
+[tool.ruff]
+line-length = 88
+cache-dir = ".cache/ruff"
+fix = true
+extend-exclude = ["**/migrations/**"]
