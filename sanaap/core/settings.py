@@ -1,12 +1,16 @@
 from pathlib import Path
 
+from .envs import get_envs
+
+_envs = get_envs()
+
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-SECRET_KEY = "django-insecure--8=hzpfmk)xjspa%w1zrn$kg%kob8imibk)hwiuvp$wuikkmey"
+SECRET_KEY = _envs.django_secret
 
-DEBUG = True
+DEBUG = _envs.environment == "dev"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = _envs.django_allowed_hosts
 
 INSTALLED_APPS = [
     "django.contrib.auth",
@@ -27,8 +31,12 @@ WSGI_APPLICATION = "sanaap.core.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": _envs.postgres_db,
+        "USER": _envs.postgres_user,
+        "PASSWORD": _envs.postgres_password,
+        "HOST": _envs.postgres_host,
+        "PORT": _envs.postgres_port,
     }
 }
 
