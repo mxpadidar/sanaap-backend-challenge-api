@@ -1,3 +1,5 @@
+-include .env
+
 .PHONY: install migrations migrate run lint format type-check test all
 all: install lint type-check test
 	@echo "-> All checks passed!"
@@ -26,3 +28,12 @@ migrate:
 test:
 	@uv run pytest tests
 
+.PHONY: compose-up compose-down psql
+compose-up:
+	@docker compose up -d
+
+compose-down:
+	@docker compose down
+
+psql:
+	@docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
