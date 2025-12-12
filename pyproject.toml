@@ -15,6 +15,8 @@ dev = [
   "django-stubs-ext>=5.2.8",
   "djangorestframework-stubs>=3.16.6",
   "pyright>=1.1.407",
+  "pytest>=9.0.2",
+  "pytest-django>=4.11.1",
   "ruff>=0.14.8",
 ]
 
@@ -29,3 +31,13 @@ line-length = 88
 cache-dir = ".cache/ruff"
 fix = true
 extend-exclude = ["**/migrations/**"]
+
+[tool.pytest.ini_options]
+pythonpath = "."
+addopts = "-q --tb=line --maxfail=1"
+console_output_style = "count"
+log_cli = false
+log_cli_level = "INFO"
+log_cli_format = "[%(name)s]  -- %(message)s"
+cache_dir = ".cache/pytest"
+DJANGO_SETTINGS_MODULE = "sanaap.core.settings"
