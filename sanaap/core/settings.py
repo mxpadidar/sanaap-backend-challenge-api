@@ -50,3 +50,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "sanaap.core.exc_handler.drf_exception_handler_override"
 }
+
+JWT_SECRET = _envs.jwt_secret

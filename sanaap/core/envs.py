@@ -1,4 +1,5 @@
 import functools
+import secrets
 from typing import Literal
 
 from django.core.management.utils import get_random_secret_key
@@ -23,6 +24,8 @@ class Envs(BaseSettings):
     redis_host: str = "localhost"
     redis_port: int = 6379
     redis_db: int = 0
+
+    jwt_secret: str = secrets.token_hex(32)
 
     model_config = SettingsConfigDict(env_file=".env", frozen=True)
 

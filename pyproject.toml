@@ -9,6 +9,7 @@ dependencies = [
   "djangorestframework>=3.16.1",
   "psycopg>=3.3.2",
   "pydantic-settings>=2.12.0",
+  "pyjwt>=2.10.1",
 ]
 
 [dependency-groups]
