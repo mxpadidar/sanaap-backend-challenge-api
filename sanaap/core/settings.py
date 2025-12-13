@@ -1,3 +1,4 @@
+from datetime import timedelta
 from pathlib import Path
 
 from .envs import get_envs
@@ -52,3 +53,4 @@ REST_FRAMEWORK = {
 }
 
 JWT_SECRET = _envs.jwt_secret
+JWT_TTL = timedelta(seconds=_envs.jwt_ttl_sec)

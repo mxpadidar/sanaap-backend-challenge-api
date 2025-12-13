@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 # Map custom exception types to HTTP status codes
 EXC_STATUS_CODE: dict[type[exceptions.BaseExc], int] = {
     exceptions.ConflictExc: status.HTTP_409_CONFLICT,
+    exceptions.AuthFailedExc: status.HTTP_401_UNAUTHORIZED,
 }
 
 

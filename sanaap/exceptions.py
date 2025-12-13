@@ -5,3 +5,6 @@ class BaseExc(Exception):
 
 
 class ConflictExc(BaseExc): ...
+
+
+class AuthFailedExc(BaseExc): ...

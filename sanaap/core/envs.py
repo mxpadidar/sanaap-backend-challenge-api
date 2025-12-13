@@ -26,6 +26,7 @@ class Envs(BaseSettings):
     redis_db: int = 0
 
     jwt_secret: str = secrets.token_hex(32)
+    jwt_ttl_sec: int = 600
 
     model_config = SettingsConfigDict(env_file=".env", frozen=True)
 
