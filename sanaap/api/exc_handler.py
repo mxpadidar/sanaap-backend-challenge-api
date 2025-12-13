@@ -26,9 +26,7 @@ def drf_exception_handler_override(exc: Exception, context: dict) -> Response | 
         exc_type = type(exc)
         status_code = EXC_STATUS_CODE.get(exc_type)
         if status_code is None:
-            logger.critical(
-                f"Unmapped application exception caught: {exc_type.__name__}"
-            )
+            logger.critical(f"Unmapped application exception caught: {exc_type.__name__}")
             status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response({"detail": exc.detail}, status=status_code)

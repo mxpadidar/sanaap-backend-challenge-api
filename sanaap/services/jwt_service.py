@@ -16,9 +16,7 @@ class JWTService:
         now = datetime.datetime.now(datetime.UTC)
         exp = now + ttl
         claims = {"sub": sub, "iss": now.timestamp(), "exp": exp.timestamp()}
-        return jwt.encode(
-            payload=claims, key=self._secret_key, algorithm=self._algorithm
-        )
+        return jwt.encode(payload=claims, key=self._secret_key, algorithm=self._algorithm)
 
     def decode(self, raw_token: str) -> str:
         """Decode and validate the given token and returns the sub"""

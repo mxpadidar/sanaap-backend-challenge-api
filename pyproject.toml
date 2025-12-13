@@ -31,7 +31,7 @@ venvPath = "."
 venv = ".venv"
 
 [tool.ruff]
-line-length = 88
+line-length = 90
 cache-dir = ".cache/ruff"
 fix = true
 extend-exclude = ["**/migrations/**"]
