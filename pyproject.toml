@@ -8,6 +8,7 @@ dependencies = [
   "django>=5.2.0,<5.3",
   "djangorestframework>=3.16.1",
   "psycopg>=3.3.2",
+  "punq>=0.7.0",
   "pydantic-settings>=2.12.0",
   "pyjwt>=2.10.1",
 ]
