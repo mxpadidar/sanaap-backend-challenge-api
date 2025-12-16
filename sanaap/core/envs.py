@@ -20,6 +20,8 @@ class Envs(BaseSettings):
 
     minio_root_user: str = "minio"
     minio_root_password: str = "minio"
+    minio_endpoint: str = "localhost:9000"
+    minio_ssl: bool = False
 
     redis_host: str = "localhost"
     redis_port: int = 6379

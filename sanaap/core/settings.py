@@ -95,3 +95,8 @@ REST_FRAMEWORK = {
 
 JWT_SECRET = _envs.jwt_secret
 JWT_TTL = timedelta(seconds=_envs.jwt_ttl_sec)
+
+MINIO_USER = _envs.minio_root_user
+MINIO_PASSWORD = _envs.minio_root_password
+MINIO_ENDPOINT = _envs.minio_endpoint
+MINIO_SSL = _envs.minio_ssl
