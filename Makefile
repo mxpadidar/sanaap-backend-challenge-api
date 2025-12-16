@@ -37,3 +37,10 @@ compose-down:
 
 psql:
 	@docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
+
+.PHONY: rbac users
+rbac:
+	@uv run manage.py rbac
+
+users:
+	@uv run manage.py users
