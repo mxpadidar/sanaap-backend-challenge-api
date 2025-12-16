@@ -22,6 +22,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party
     "rest_framework",
+    # local
+    "sanaap.docs",
 ]
 
 MIDDLEWARE = [
@@ -100,3 +102,5 @@ MINIO_USER = _envs.minio_root_user
 MINIO_PASSWORD = _envs.minio_root_password
 MINIO_ENDPOINT = _envs.minio_endpoint
 MINIO_SSL = _envs.minio_ssl
+
+DOCS_BUCKET = "documents"
