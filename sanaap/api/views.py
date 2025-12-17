@@ -118,11 +118,32 @@ class DocGetPutDelView(APIView):
     def get_permissions(self) -> list:
         if self.request.method == "GET":
             return [permissions.CanReadDoc()]
+        if self.request.method == "PUT":
+            return [permissions.CanWriteDoc()]
         return [permissions.CanDeleteDoc()]  # just admin has this perm
 
     @extend_schema(responses={200: serializers.DocResp})
     def get(self, request, file_uuid: uuid.UUID) -> Response:
         doc = get_object_or_404(Document, uuid=file_uuid, status=DocStatus.ACTIVE)
+        return Response(
+            serializers.DocResp(doc, context={"storage": container.get_storage()}).data
+        )
+
+    @extend_schema(request=serializers.FileReq, responses={200: serializers.DocResp})
+    @parser_classes([parsers.MultiPartParser])
+    def put(self, request, file_uuid: uuid.UUID) -> Response:
+        serializer = serializers.FileReq(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        doc = handlers.handle_document_modify(
+            storage=container.get_storage(),
+            file_uuid=file_uuid,
+            username=request.user.username,  # type: ignore
+            bucket=settings.DOCS_BUCKET,
+            file=serializer.validated_data["file"],
+            **serializer.get_file_info(),
+        )
+
         return Response(
             serializers.DocResp(doc, context={"storage": container.get_storage()}).data
         )

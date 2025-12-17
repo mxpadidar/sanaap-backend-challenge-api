@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 EXC_STATUS_CODE: dict[type[exceptions.BaseExc], int] = {
     exceptions.ConflictExc: status.HTTP_409_CONFLICT,
     exceptions.AuthFailedExc: status.HTTP_401_UNAUTHORIZED,
+    exceptions.NotFoundExc: status.HTTP_404_NOT_FOUND,
 }
 
 
