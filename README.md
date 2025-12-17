@@ -76,13 +76,15 @@ Edit the `.env` file according to your setup:
 
 #### For Docker Compose Setup (Default)
 
-The default `.env.example` file is configured for Docker Compose. Keep these values as-is:
+The default `.env.example` file is configured for Docker Compose:
 
 ```env
-POSTGRES_HOST=sanaap-db  # comment for tests
-MINIO_ENDPOINT=sanaap-s3:9000  # comment for tests
-REDIS_HOST=sanaap-cache  # comment for tests
+POSTGRES_HOST=sanaap-db
+MINIO_ENDPOINT=sanaap-s3:9000
+REDIS_HOST=sanaap-cache
 ```
+
+**Note**: The `.env.example` file includes comments like `# comment for tests` on these lines. These indicate which variables need to be commented out when running tests locally (to use the defaults from `envs.py`).
 
 #### For Local Development (Without Docker Backend Services)
 
@@ -265,13 +267,13 @@ make migrate
 
 ### Code Quality
 
-Run linter (Ruff) to format code:
+Format code with Ruff:
 
 ```bash
 make lint
 ```
 
-Check code style:
+Check code style with Ruff:
 
 ```bash
 make format
@@ -394,7 +396,7 @@ sanaap-backend-challenge-api/
 | `REDIS_HOST` | Redis host | `localhost` | No |
 | `REDIS_PORT` | Redis port | `6379` | No |
 | `JWT_SECRET` | JWT signing secret | Random | Yes (prod) |
-| `JWT_TTL_SEC` | JWT token TTL in seconds | `600` | No |
+| `JWT_TTL_SEC` | JWT token TTL in seconds | `600` (envs.py default), `6000` (.env.example) | No |
 
 ## Common Issues and Troubleshooting
 
