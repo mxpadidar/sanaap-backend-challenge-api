@@ -79,9 +79,9 @@ Edit the `.env` file according to your setup:
 The default `.env.example` file is configured for Docker Compose. Keep these values as-is:
 
 ```env
-POSTGRES_HOST=sanaap-db
-MINIO_ENDPOINT=sanaap-s3:9000
-REDIS_HOST=sanaap-cache
+POSTGRES_HOST=sanaap-db  # comment for tests
+MINIO_ENDPOINT=sanaap-s3:9000  # comment for tests
+REDIS_HOST=sanaap-cache  # comment for tests
 ```
 
 #### For Local Development (Without Docker Backend Services)
@@ -107,13 +107,13 @@ REDIS_HOST=localhost  # Uses default from envs.py
 
 When these environment variables are not set or commented out, the application will use the defaults from `envs.py`, which are configured for local development.
 
-**Important**: Don't forget to update other credentials in `.env`:
+**Important**: Don't forget to update other credentials in `.env` for production:
 
 ```env
-DJANGO_SECRET=your-secret-key-here
-JWT_SECRET=your-jwt-secret-here
-POSTGRES_PASSWORD=secure-password
-MINIO_ROOT_PASSWORD=secure-password
+DJANGO_SECRET=change-me
+JWT_SECRET=change-me
+POSTGRES_PASSWORD=sanaap-pg-pass
+MINIO_ROOT_PASSWORD=minio-pass
 ```
 
 ## Running the Application
@@ -172,16 +172,6 @@ Or edit `compose.yaml` to comment out the backend service:
 ```
 
 #### Step 2: Configure Environment for Local Django
-
-Update your `.env` file to use the Docker service names (since infrastructure is in Docker):
-
-```env
-POSTGRES_HOST=sanaap-db      # Docker container name
-MINIO_ENDPOINT=sanaap-s3:9000
-REDIS_HOST=sanaap-cache
-```
-
-Wait, actually if the Django app runs locally (not in Docker), it needs to connect to the Docker containers via localhost. Let me correct this:
 
 Update your `.env` file:
 
