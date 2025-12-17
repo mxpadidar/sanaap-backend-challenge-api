@@ -31,13 +31,7 @@ class TokenAuth(authentication.TokenAuthentication):
             username = self.jwt.decode(key)
         except ValueError:
             raise exceptions.AuthenticationFailed("Invalid or expired token.")
-        user = (
-            User.objects.prefetch_related(
-                "groups", "groups__permissions", "user_permissions"
-            )
-            .filter(username=username, is_active=True)
-            .first()
-        )
+        user = self.get_user(username)
         if user is None:
             raise exceptions.AuthenticationFailed("Authentication failed.")
         return user, key

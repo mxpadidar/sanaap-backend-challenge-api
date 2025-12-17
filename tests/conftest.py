@@ -7,11 +7,20 @@ import pytest
 from django.conf import settings
 from django.contrib.auth.models import Group, Permission, User
 from django.contrib.contenttypes.models import ContentType
+from django.test import override_settings
 from django.urls import reverse
 from rest_framework.test import APIClient
 
 from sanaap.docs.models import Document
 from sanaap.services import JWTService, MinioStorage
+
+
+@pytest.fixture(autouse=True)
+def disable_cache_for_tests():
+    with override_settings(
+        CACHES={"default": {"BACKEND": "django.core.cache.backends.dummy.DummyCache"}}
+    ):
+        yield
 
 
 @pytest.fixture
