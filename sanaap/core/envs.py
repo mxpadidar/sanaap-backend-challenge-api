@@ -25,7 +25,6 @@ class Envs(BaseSettings):
 
     redis_host: str = "localhost"
     redis_port: int = 6379
-    redis_db: int = 0
 
     jwt_secret: str = secrets.token_hex(32)
     jwt_ttl_sec: int = 600

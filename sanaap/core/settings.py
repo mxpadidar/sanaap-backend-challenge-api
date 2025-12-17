@@ -104,3 +104,15 @@ MINIO_ENDPOINT = _envs.minio_endpoint
 MINIO_SSL = _envs.minio_ssl
 
 DOCS_BUCKET = "documents"
+
+REDIS_HOST = _envs.redis_host
+REDIS_PORT = _envs.redis_port
+
+AUTH_USER_CACHE_TTL_SEC = 60  # seconds
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/10",
+    }
+}
