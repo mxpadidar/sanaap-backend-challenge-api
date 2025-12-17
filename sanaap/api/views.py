@@ -1,13 +1,17 @@
 from django.conf import settings
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import parsers, status
 from rest_framework.decorators import parser_classes
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from sanaap import container, handlers
 from sanaap.api import permissions, serializers
 from sanaap.api.auth import TokenAuth
+from sanaap.docs.enums import DocStatus
+from sanaap.docs.models import Document
 
 
 class HealthCheckView(APIView):
@@ -45,12 +49,20 @@ class LoginView(APIView):
         )
 
 
+class DocsPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = "limit"
+    max_page_size = 100
+
+
 class DocPostListView(APIView):
     authentication_classes = [TokenAuth]
 
     def get_permissions(self) -> list:
         if self.request.method == "POST":
             return [permissions.CanWriteDoc()]
+        if self.request.method == "GET":
+            return [permissions.CanReadDoc()]
         return [permissions.CanDeleteDoc()]  # just admin
 
     @parser_classes([parsers.MultiPartParser])
@@ -70,4 +82,29 @@ class DocPostListView(APIView):
             serializers.DocResp(doc, context={"storage": storage}).data,
             status=status.HTTP_201_CREATED,
         )
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter("name", type=OpenApiTypes.STR, required=False),
+            OpenApiParameter("mimetype", type=OpenApiTypes.STR, required=False),
+            OpenApiParameter("ordering", type=OpenApiTypes.STR, required=False),
+            OpenApiParameter("page", type=OpenApiTypes.INT, required=False),
+            OpenApiParameter("limit", type=OpenApiTypes.INT, required=False),
+        ],
+        responses=serializers.DocResp(many=True),
+    )
+    def get(self, request):
+        qs = Document.objects.filter(status=DocStatus.ACTIVE)
+        name = request.query_params.get("name")
+        mimetype = request.query_params.get("mimetype")
+        if name:
+            qs = qs.filter(name__icontains=name)
+        if mimetype:
+            qs = qs.filter(mimetype=mimetype)
+        ordering = request.query_params.get("ordering", "-created_at")
+        qs = qs.order_by(*ordering.split(","))
+        paginator = DocsPagination()
+        page = paginator.paginate_queryset(qs, request)
+        serializer = serializers.DocResp(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
         return [permissions.CanDeleteDoc()]  # just admin has this perm
