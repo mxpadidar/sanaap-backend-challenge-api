@@ -1,4 +1,7 @@
+import uuid
+
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import parsers, status
@@ -107,4 +110,19 @@ class DocPostListView(APIView):
         page = paginator.paginate_queryset(qs, request)
         serializer = serializers.DocResp(page, many=True)
         return paginator.get_paginated_response(serializer.data)
+
+
+class DocGetPutDelView(APIView):
+    authentication_classes = [TokenAuth]
+
+    def get_permissions(self) -> list:
+        if self.request.method == "GET":
+            return [permissions.CanReadDoc()]
         return [permissions.CanDeleteDoc()]  # just admin has this perm
+
+    @extend_schema(responses={200: serializers.DocResp})
+    def get(self, request, file_uuid: uuid.UUID) -> Response:
+        doc = get_object_or_404(Document, uuid=file_uuid, status=DocStatus.ACTIVE)
+        return Response(
+            serializers.DocResp(doc, context={"storage": container.get_storage()}).data
+        )
