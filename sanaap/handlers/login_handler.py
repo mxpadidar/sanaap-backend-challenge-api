@@ -2,7 +2,8 @@ import logging
 import typing
 from datetime import timedelta
 
-from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.models import User
 
 from sanaap.exceptions import AuthFailedExc
 from sanaap.services import JWTService
@@ -17,7 +18,7 @@ class LoginData(typing.TypedDict):
 
 
 def handle_user_login(jwt_service: JWTService, **data: typing.Unpack[LoginData]) -> str:
-    user = authenticate(username=data["username"], password=data["password"])
-    if user is None or not user.is_active:
+    user = User.objects.filter(username=data["username"], is_active=True).first()
+    if user is None or not check_password(data["password"], user.password):
         raise AuthFailedExc("Authentication Failed")
-    return jwt_service.encode(sub=user.get_username(), ttl=data["token_ttl"])
+    return jwt_service.encode(sub=user.username, ttl=data["token_ttl"])
