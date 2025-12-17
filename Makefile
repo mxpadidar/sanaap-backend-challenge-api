@@ -28,12 +28,15 @@ migrate:
 test:
 	@uv run pytest tests
 
-.PHONY: compose-up compose-down psql
+.PHONY: compose-up compose-down psql infra-up
 compose-up:
 	@docker compose up -d
 
 compose-down:
 	@docker compose down
+
+infra-up:
+	@docker compose up -d postgres minio redis
 
 psql:
 	@docker compose exec postgres psql -U $(POSTGRES_USER) -d $(POSTGRES_DB)
