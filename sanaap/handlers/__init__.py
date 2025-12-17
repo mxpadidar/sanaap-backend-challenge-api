@@ -1,3 +1,4 @@
+from .doc_delete_handler import handle_document_delete
 from .doc_modify_handler import handle_document_modify
 from .doc_upload_handler import handle_document_upload
 from .login_handler import handle_user_login
@@ -7,5 +8,6 @@ __all__ = [
     "handle_user_signup",
     "handle_user_login",
     "handle_document_upload",
+    "handle_document_delete",
     "handle_document_modify",
 ]

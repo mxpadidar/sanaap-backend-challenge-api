@@ -147,3 +147,12 @@ class DocGetPutDelView(APIView):
         return Response(
             serializers.DocResp(doc, context={"storage": container.get_storage()}).data
         )
+
+    @extend_schema(responses={204: None})
+    def delete(self, request, file_uuid: uuid.UUID) -> Response:
+        handlers.handle_document_delete(
+            storage=container.get_storage(),
+            file_uuid=file_uuid,
+            username=request.user.username,  # type: ignore
+        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
