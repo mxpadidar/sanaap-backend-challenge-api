@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party
     "rest_framework",
+    "drf_spectacular",
     # local
     "sanaap.docs",
 ]
@@ -92,7 +93,9 @@ LOGGING = {
 }
 
 REST_FRAMEWORK = {
-    "EXCEPTION_HANDLER": "sanaap.api.exc_handler.drf_exception_handler_override"
+    "DEFAULT_AUTHENTICATION_CLASSES": [],
+    "EXCEPTION_HANDLER": "sanaap.api.exc_handler.drf_exception_handler_override",
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 JWT_SECRET = _envs.jwt_secret
@@ -115,4 +118,12 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": f"redis://{REDIS_HOST}:{REDIS_PORT}/10",
     }
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Sanaap API",
+    "DESCRIPTION": "Document management API",
+    "VERSION": "1.0.0",
+    "SECURITY": [{"BearerAuth": []}],
+    "COMPONENT_SPLIT_REQUEST": True,
 }

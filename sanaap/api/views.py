@@ -1,42 +1,43 @@
-import logging
-
 from django.conf import settings
+from drf_spectacular.utils import extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from sanaap import handlers, services
+from sanaap import container, handlers
 from sanaap.api import serializers
-from sanaap.container import container
-
-logger = logging.getLogger(__name__)
 
 
 class HealthCheckView(APIView):
-    """API view to check the health of the application."""
+    serializer_class = serializers.HealthResp
 
     def get(self, request):
+        return Response(data={"detail": "ok"}, status=status.HTTP_200_OK)
+
+
+class SignupView(APIView):
+    @extend_schema(request=serializers.SignupReq, responses={201: serializers.SignupResp})
+    def post(self, request):
+        serializer = serializers.SignupReq(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        handlers.handle_user_signup(default_group="normal", **serializer.validated_data)
         return Response(
-            {"detail": "ok"},
-            status=status.HTTP_200_OK,
+            data=serializers.SignupResp({"detail": "User created."}).data,
+            status=status.HTTP_201_CREATED,
         )
 
 
-class UserSignupView(APIView):
+class LoginView(APIView):
+    @extend_schema(request=serializers.LoginReq, responses={200: serializers.LoginResp})
     def post(self, request):
-        serializer = serializers.SignupSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        handlers.handle_user_signup(default_group="normal", **serializer.validated_data)
-        return Response(data={"detail": "user created."}, status=status.HTTP_201_CREATED)
-
-
-class UserLoginView(APIView):
-    def post(self, request):
-        serializer = serializers.LoginSerializer(data=request.data)
+        serializer = serializers.LoginReq(data=request.data)
         serializer.is_valid(raise_exception=True)
         token = handlers.handle_user_login(
-            jwt_service=container.resolve(services.JWTService),  # type: ignore
+            jwt_service=container.get_jwt_service(),
             token_ttl=settings.JWT_TTL,
             **serializer.validated_data,
         )
-        return Response(data={"access_token": token}, status=status.HTTP_200_OK)
+        return Response(
+            data=serializers.LoginResp({"access_token": token}).data,
+            status=status.HTTP_200_OK,
+        )

@@ -8,6 +8,7 @@ dependencies = [
   "django>=5.2.0,<5.3",
   "django-redis>=6.0.0",
   "djangorestframework>=3.16.1",
+  "drf-spectacular>=0.29.0",
   "minio>=7.2.20",
   "psycopg>=3.3.2",
   "punq>=0.7.0",
