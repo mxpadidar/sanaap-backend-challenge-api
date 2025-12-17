@@ -267,17 +267,19 @@ make migrate
 
 ### Code Quality
 
-Format code with Ruff:
+Run code formatter (Ruff):
 
 ```bash
-make lint
+make lint  # Runs: ruff format sanaap tests
 ```
 
-Check code style with Ruff:
+Run code linter (Ruff):
 
 ```bash
-make format
+make format  # Runs: ruff check sanaap tests
 ```
+
+**Note**: The Makefile command names are somewhat counterintuitive - `make lint` formats code while `make format` checks it.
 
 Type checking with Pyright:
 
